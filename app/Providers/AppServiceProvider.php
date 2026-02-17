@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\SendEmailCode;
+use App\Listeners\SendEmailCodeListener;
 use Illuminate\Support\ServiceProvider;
+// DELETE: use Symfony\Contracts\EventDispatcher\Event;
+use Illuminate\Support\Facades\Event; // ADD THIS INSTEAD
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            SendEmailCode::class,
+            SendEmailCodeListener::class,
+        );
     }
 }
