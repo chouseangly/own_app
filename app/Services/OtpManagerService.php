@@ -2,11 +2,10 @@
 
 // app/Services/OtpManagerService.php
 namespace App\Services;
-
-use App\Models\Otp;
 use App\Events\SendEmailCode;
-use Illuminate\Http\Request;
+use App\Models\Otp;
 use Exception;
+use Illuminate\Http\Request;
 
 class OtpManagerService {
     public function otpEmail(Request $request): bool

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Opt extends Model
+class Otp extends Model
 {
     protected $table = 'otps';
 
