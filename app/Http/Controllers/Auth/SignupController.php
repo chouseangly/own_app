@@ -19,43 +19,48 @@ class SignupController extends Controller
         $this->otpManagerService = $otpManagerService;
     }
 
-    public function register(Request $request)
-    {
-        // It is recommended to add validation here
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+  // app/Http/Controllers/Auth/SignupController.php
+
+public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8',
+    ]);
+
+    try {
+        // Create the user first (outside a global transaction if you want them saved regardless of mail)
+        $user = User::create([
+            'name'     => $request->post('name'),
+            'email'    => $request->post('email'),
+            'password' => Hash::make($request->post('password')),
         ]);
 
+        // Attempt to send OTP
         try {
-            // Start the transaction
-            return DB::transaction(function () use ($request) {
-
-                // 1. Insert user data into users table
-                $user = User::create([
-                    'name'     => $request->post('name'),
-                    'email'    => $request->post('email'),
-                    'password' => Hash::make($request->post('password')),
-                ]);
-
-                // 2. Insert OTP into otp table and dispatch email event
-                // This calls the service you already built
-                $this->otpManagerService->otpEmail($request);
-
-                return response([
-                    'status' => true,
-                    'message' => 'Registration successful. Please check your email for the OTP code.',
-                    'user' => $user
-                ], 201);
-            });
-
-        } catch (Exception $exception) {
-            // If anything fails inside the transaction, it rolls back automatically
+            $this->otpManagerService->otpEmail($request);
+        } catch (Exception $e) {
+            // Log the error but don't stop the registration
+            \Illuminate\Support\Facades\Log::error("OTP failed: " . $e->getMessage());
             return response([
-                'status' => false,
-                'message' => 'Registration failed: ' . $exception->getMessage()
-            ], 422);
+                'status' => true,
+                'message' => 'User created, but failed to send OTP. Please try resending OTP.',
+                'user' => $user
+            ], 201);
         }
+
+        return response([
+            'status' => true,
+            'message' => 'Registration successful. Check your email.',
+            'user' => $user
+        ], 201);
+
+    } catch (Exception $exception) {
+        return response([
+            'status' => false,
+            'message' => 'Registration failed: ' . $exception->getMessage()
+        ], 422);
     }
+}
 }
