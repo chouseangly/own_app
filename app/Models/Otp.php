@@ -9,15 +9,13 @@ class Otp extends Model
     protected $table = 'otps';
 
     protected $fillable = [
-        'phone',
-        'code',
+        'email',
         'token',
         'created_at'
     ];
 
     protected $casts = [
-        'phone' => 'string',
-        'code' => 'string',
+        'email' => 'string',
         'token' => 'string',
         'is_verified' => 'string',
         'created_at' => 'datetime'
