@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\Ask;
+use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,26 +16,23 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('username')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('device_token')->nullable();
+            $table->string('web_token')->nullable();
+            $table->unsignedTinyInteger('status')->default(Status::ACTIVE);
+            $table->string('country_code')->nullable();
+            $table->unsignedBigInteger('is_guest')->default(Ask::NO);
+            $table->decimal('balance', 19, 6)->default(0);
             $table->rememberToken();
+            $table->string('creator_type')->nullable();
+            $table->bigInteger('creator_id')->nullable();
+            $table->string('editor_type')->nullable();
+            $table->bigInteger('editor_id')->nullable();
             $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
         });
     }
 
@@ -43,7 +42,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+
     }
 };

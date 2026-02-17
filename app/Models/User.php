@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'phone',
+        'country_code',
+        'is_guest',
+        'status',
+        'email_verified_at'
     ];
 
     /**
@@ -36,13 +42,18 @@ class User extends Authenticatable
     /**
      * Get the attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'id'                => 'integer',
+        'name'              => 'string',
+        'email'             => 'string',
+        'password'          => 'hashed',
+        'username'          => 'string',
+        'phone'             => 'string',
+        'country_code'      => 'string',
+        'is_guest'          => 'integer',
+        'status'            => 'integer',
+        'email_verified_at' => 'datetime',
+    ];
 }
