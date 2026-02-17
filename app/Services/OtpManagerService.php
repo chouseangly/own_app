@@ -2,12 +2,14 @@
 
 // app/Services/OtpManagerService.php
 namespace App\Services;
+
 use App\Events\SendEmailCode;
 use App\Models\Otp;
 use Exception;
 use Illuminate\Http\Request;
 
-class OtpManagerService {
+class OtpManagerService
+{
     public function otpEmail(Request $request): bool
     {
         try {
@@ -35,5 +37,28 @@ class OtpManagerService {
             \Illuminate\Support\Facades\Log::error($exception->getMessage());
             throw new Exception("Failed to send OTP", 422);
         }
+    }
+
+    public function verifyOtp(string $email, string $token)
+    {
+        $otp = Otp::where('email', $email)->where('token', $token)->first();
+
+        if (!$otp) {
+            return false;
+        }
+
+        // Optional: Check if expired (e.g., older than 10 minutes)
+
+        // Check if expired (older than 10 minutes)
+        if ($otp->created_at->diffInMinutes(now()) > 10) {
+            // FIX: Use the class-level query to delete instead of $otp->delete()
+            Otp::where('email', $email)->where('token', $token)->delete();
+            return false;
+        }
+
+        // FIX: Use the class-level query to delete here as well
+        Otp::where('email', $email)->where('token', $token)->delete();
+
+        return true;
     }
 }
