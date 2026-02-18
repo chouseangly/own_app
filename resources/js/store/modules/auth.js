@@ -1,4 +1,64 @@
+import axios from "axios";
 
 export const auth = {
+    namespaced: true,
+    state: {
+        user: null,
+        token: localStorage.getItem('token') || null,
+        status: ''
+    },
+    mutations: {
+        AUTH_SUCCESS(state,{ token ,user}){
+            state.status = 'success';
+            state.token = token;
+            state.user = user;
+        },
 
+        AUTH_ERROR(state){
+            state.status = 'error';
+        },
+
+        LOGOUT(state){
+            state.status = '';
+            state.token = null;
+            state.user = null;
+        }
+
+
+    },
+    actions: {
+        async register({commit}, userData){
+            try{
+                const response = await axios.post('/api/register',userData);
+                return response.data;
+
+            }catch(error){
+                commit('AUTH_ERROR');
+                throw error;
+            }
+        },
+        async verifyOtp({commit},otpData){
+            try{
+                const response = await axios.post('/api/verify-otp',otpData);
+                return response.data;
+            }catch(error){
+
+                throw error;
+            }
+        },
+        async login({commit},credentails){
+            try{
+                const response = await axios.post('/api/login',credentails);
+                const {token , user} = response.data;
+                localStorage.setItem('token',token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                commit('AUTH_SUCCESS',{token,user});
+                return response.data;
+            }catch(error){
+                localStorage.removeItem('token');
+                commit('AUTH_ERROR');
+                throw error;
+            }
+        }
+    }
 }
