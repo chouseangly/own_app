@@ -3,8 +3,9 @@
     <LoadingComponent :props="{isActive: true}" />
   </div>
 
-  <div v-if="theme === 'frontend'">
+  <div v-else-if="theme === 'frontend'">
     <FrontendNavbarComponent />
+    <router-view></router-view>
   </div>
 </template>
 
@@ -20,15 +21,14 @@ export default {
     },
     data() {
         return {
-            // Set this to 'loading' to see your loader
             theme: 'loading'
         }
     },
     mounted() {
-        // Switch to 'frontend' after 3 seconds to test the transition
+        // Simulate loading then show the app
         setTimeout(() => {
             this.theme = 'frontend';
-        }, 3000);
+        }, 1000);
     }
 }
 </script>

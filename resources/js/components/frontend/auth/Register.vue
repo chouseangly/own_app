@@ -1,7 +1,8 @@
 <template >
     <LoadingComponent :props="loading"/>
     <div>
-        <img src="images\required\auth.jpg" alt="">
+        <!-- <img src="images\required\auth.jpg" alt=""> -->
+         <h1>register</h1>
     </div>
 </template>
 <script>
