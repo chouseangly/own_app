@@ -13,3 +13,4 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [SignupController::class, 'register']);
 Route::post('/verify-otp',[SignupController::class,'verifyOtp']);
 Route::post('/login',[LoginController::class,'login']);
+Route::post('/resent-otp',[SignupController::class,'resentOtp']);

@@ -65,18 +65,19 @@ class SignupController extends Controller
         }
     }
 
-    public function verifyOtp(Request $request){
+    public function verifyOtp(Request $request)
+    {
 
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'token' => 'required|string',
         ]);
 
-        $isValid = $this->otpManagerService->verifyOtp($request->email,$request->token);
+        $isValid = $this->otpManagerService->verifyOtp($request->email, $request->token);
 
 
-        if(!$isValid){
-            return response(['status' => false , 'message' => 'Invalid or expired otp'],422);
+        if (!$isValid) {
+            return response(['status' => false, 'message' => 'Invalid or expired otp'], 422);
         }
 
         // Mark user as verified
@@ -85,6 +86,21 @@ class SignupController extends Controller
         $user->email_verified_at = now();
         $user->save();
 
-        return response(['status' => true , 'message' => 'Otp verified successfully'],200);
+        return response(['status' => true, 'message' => 'Otp verified successfully'], 200);
+    }
+
+    public function resentOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email'
+        ]);
+
+        // sent otp code
+        $this->otpManagerService->otpEmail($request);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP resent successfully.'
+        ], 200);
     }
 }
