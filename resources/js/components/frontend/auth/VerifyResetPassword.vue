@@ -1,29 +1,6 @@
 <template>
     <LoadingComponent :props="loading" />
-    <!-- <div class="w-full max-w-md mx-auto rounded-2xl bg-white shadow-card p-8 mt-20">
-        <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold text-primary">Verify OTP</h2>
-            <p class="text-gray-500 text-sm">Enter the code sent to your email</p>
-        </div>
 
-        <form @submit.prevent="submitOtp">
-            <div class="mb-6">
-                <input v-model="form.otp" type="text" placeholder="Enter 6-digit code"
-                    class="w-full h-12 px-4 rounded-lg border border-[#D9DBE9] text-center text-xl tracking-widest focus:border-sky-400 outline-none">
-                <small class="text-red-500" v-if="errors.otp">{{ errors.otp[0] }}</small>
-            </div>
-
-            <button type="submit" class="w-full h-12 rounded-full bg-sky-400 text-white font-bold capitalize mb-4">
-                Verify Code
-            </button>
-
-            <div class="text-center">
-                <button type="button" @click="resendOtp" class="text-primary font-medium hover:underline">
-                    Resend Code
-                </button>
-            </div>
-        </form>
-    </div> -->
     <div class="w-full max-w-3xl mx-auto rounded-3xl flex overflow-hidden shadow-lg bg-white mb-24 sm:mb-0">
 
         <!-- Left image (hidden on mobile) -->
@@ -102,7 +79,7 @@ export default {
 
                 await this.$store.dispatch('/auth/verifyOtp', this.form);
                 this.toast.success('Verify otp successfully')
-                this.$router.push({ name: 'frontend.login' });
+                this.$router.push({ name: 'frontend.resetPassword' });
 
             } catch (error) {
                 if (error.response && error.response.status === 422) {

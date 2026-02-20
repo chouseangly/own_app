@@ -71,6 +71,23 @@ export const auth = {
             } catch (error) {
                 throw error
             }
+        },
+        async forgotPassword({ commit }, emailData) {
+            try {
+                const response = await axios.post('/api/forgotPassword', emailData)
+                return response.data;
+
+            } catch (error) {
+                throw error
+            }
+        },
+        async resetPassword({ commit }, payload) {
+            try {
+                const response = await axios.post('/api/reset-password', payload);
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
         }
     }
 }
