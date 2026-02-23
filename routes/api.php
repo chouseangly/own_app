@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 | Admin Routes (Role & Permission Protected)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(function () {
 
     // Role Management
     Route::prefix('role')->group(function () {
@@ -64,5 +64,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
         Route::post('/', [ProductCategoryController::class, 'store'])->middleware('permission:create_category');
         Route::match(['put', 'patch'], '/{productCategory}', [ProductCategoryController::class, 'update'])->middleware('permission:edit_category');
         Route::delete('/{productCategory}', [ProductCategoryController::class, 'destroy'])->middleware('permission:delete_category');
+        Route::get('/depth-tree', [ProductCategoryController::class, 'depthTree']);
+        Route::get('/show/{productCategory}', [ProductCategoryController::class, 'show']);
     });
 });

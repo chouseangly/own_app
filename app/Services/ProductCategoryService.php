@@ -3,11 +3,14 @@
 namespace App\Services;
 
 use App\Http\Requests\PaginateRequest;
+use App\Http\Requests\ProductCategoryRequest;
 use App\Libraries\QueryExceptionLibrary;
 use App\Models\ProductCategory;
 use Exception;
-use GuzzleHttp\Psr7\Query;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ProductCategoryService{
 
@@ -27,7 +30,7 @@ class ProductCategoryService{
      * @throws Exception
      */
 
-     public function ancestorAndSelf(ProductCategory $productCategory){
+     public function ancestorsAndSelf(ProductCategory $productCategory){
        try{
          return $productCategory->ancestorsAndSelf->reverse();
        }catch(Exception $e){
@@ -93,5 +96,81 @@ class ProductCategoryService{
             Log::info($e->getMessage());
             throw new Exception(QueryExceptionLibrary::message($e),422);
         }
+
+    }
+
+    public function show(ProductCategory $productCategory){
+       try{
+         return $productCategory;
+       }catch(Exception $e){
+         Log::info($e->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($e),422);
+       }
+
+    }
+
+    public function store(ProductCategoryRequest $request){
+        try{
+            $categorySlug = Str::slug($request->name);
+            $slug = ProductCategory::where('slug',$categorySlug)->first();
+
+            if($slug){
+                $categorySlug = Str::slug($request->name) . $request->parent_id;
+            }
+            $productCategory = ProductCategory::create(Arr::except($request->validated(),'parent_id')
+            + ['slug' => $categorySlug , 'parent_id' =>$request->parent_id == 'NULL' ? NULL : $request->parent_id]);
+            if($request->image){
+                $productCategory->addMediaFromRequest('image')->toMediaCollection('product-category');
+            }
+            return $productCategory;
+
+        }catch(Exception $e){
+         Log::info($e->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($e),422);
+       }
+    }
+
+    public function update(ProductCategoryRequest $request , ProductCategory $productCategory){
+        try{
+            $categorySlug = Str::slug($request->name);
+            $slug = ProductCategory::where('slug',$categorySlug)->first();
+            if($slug){
+                $categorySlug = Str::slug($request->name) . $request->parent_id;
+            }
+            $productCategory->update(Arr::except($request->validated(),'parent_id') + ['slug' => $categorySlug , 'parent_id' =>$request->parent_id == 'NULL' ? NULL : $request->parent_id]);
+            if($request->image){
+                $productCategory->clearMediaCollection('product-category');
+                $productCategory->addMediaFromRequest('image')->toMediaCollection('product-category');
+            }
+            return $productCategory;
+
+        }catch(Exception $e){
+         Log::info($e->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($e),422);
+       }
+    }
+
+    public function destroy(ProductCategory $productCategory){
+        try{
+
+            $productSubCategory = ProductCategory::find($productCategory->id)->children()->get();
+            if(!blank($productSubCategory)){
+                throw new Exception('You can not delete this category. because it has sub category.');
+            }else{
+                $checkProduct = $productCategory->products()->whereNull('deleted_at');
+                if(!blank($checkProduct)){
+                    $productCategory->delete();
+                }else{
+                    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                    $productCategory->delete();
+                    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                }
+
+            }
+
+        }catch(Exception $e){
+         Log::info($e->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($e),422);
+       }
     }
 }

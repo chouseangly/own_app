@@ -42,4 +42,12 @@ class ProductCategoryController extends Controller
             return response(['status' => false , 'message' => $e->getMessage()]);
         }
     }
+
+    public function show(ProductCategory $productCategory){
+        try{
+            return new ProductCategoryResource($this->productCategoryService->show($productCategory));
+        }catch(Exception $e){
+            return response(['status'=>false,'message' => $e->getMessage()],422);
+        }
+    }
 }

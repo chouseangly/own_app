@@ -36,4 +36,10 @@ class LoginController extends Controller{
 
         ]);
     }
+
+    public function logout(Request $request){
+        $request->user()->currentToken()->delete();
+        return response(['status' => true, 'message' => 'Logout successfully'],200 );
+
+    }
 }

@@ -7,7 +7,6 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-
 class RolePermissionTableSeeder extends Seeder
 {
     /**
@@ -17,48 +16,60 @@ class RolePermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminRole = Role::find(EnumRole::ADMIN);
-        $adminRole?->givePermissionTo(Permission::all());
-
-        $branchManager = Role::find(3);
-        if ($branchManager) {
-            $branchManagerPermissions = [
-                ['name' => 'dashboard'],
-                ['name' => 'pos'],
-                ['name' => 'pos-orders'],
-                ['name' => 'online-orders'],
-                ['name' => 'push-notifications'],
-                ['name' => 'push-notifications_create'],
-                ['name' => 'push-notifications_edit'],
-                ['name' => 'push-notifications_delete'],
-                ['name' => 'push-notifications_show'],
-                ['name' => 'subscribers'],
-                ['name' => 'customers'],
-                ['name' => 'customers_create'],
-                ['name' => 'customers_edit'],
-                ['name' => 'customers_delete'],
-                ['name' => 'customers_show'],
-                ['name' => 'employees'],
-                ['name' => 'employees_create'],
-                ['name' => 'employees_edit'],
-                ['name' => 'employees_delete'],
-                ['name' => 'employees_show'],
-                ['name' => 'transactions'],
-                ['name' => 'sales-report']
-            ];
-            $branchManagerPermissions = Permission::whereIn('name', $branchManagerPermissions)->get();
-            $branchManager->givePermissionTo($branchManagerPermissions);
+        // 1. Explicitly find the Admin role using the 'sanctum' guard defined in RoleTableSeeder
+        $adminRole = Role::where('name', 'Admin')->where('guard_name', 'sanctum')->first();
+        if ($adminRole) {
+            $adminRole->givePermissionTo(Permission::all());
         }
 
-        $posOperatorManager = Role::find(4);
+        // 2. Find Manager role (Role ID 3) for the sanctum guard
+        $branchManager = Role::where('name', 'Manager')->where('guard_name', 'sanctum')->first();
+        if ($branchManager) {
+            $branchManagerPermissions = [
+                'dashboard',
+                'pos',
+                'pos-orders',
+                'online-orders',
+                'push-notifications',
+                'push-notifications_create',
+                'push-notifications_edit',
+                'push-notifications_delete',
+                'push-notifications_show',
+                'subscribers',
+                'customers',
+                'customers_create',
+                'customers_edit',
+                'customers_delete',
+                'customers_show',
+                'employees',
+                'employees_create',
+                'employees_edit',
+                'employees_delete',
+                'employees_show',
+                'transactions',
+                'sales-report'
+            ];
+
+            // Note: whereIn expects a flat array of strings, not nested arrays
+            $permissions = Permission::whereIn('name', $branchManagerPermissions)
+                                     ->where('guard_name', 'sanctum')
+                                     ->get();
+            $branchManager->givePermissionTo($permissions);
+        }
+
+        // 3. Find POS Operator role (Role ID 4) for the sanctum guard
+        $posOperatorManager = Role::where('name', 'POS Operator')->where('guard_name', 'sanctum')->first();
         if ($posOperatorManager) {
             $posOperatorManagerPermissions = [
-                ['name' => 'dashboard'],
-                ['name' => 'pos'],
-                ['name' => 'pos-orders']
+                'dashboard',
+                'pos',
+                'pos-orders'
             ];
-            $posOperatorManagerPermissions = Permission::whereIn('name', $posOperatorManagerPermissions)->get();
-            $posOperatorManager->givePermissionTo($posOperatorManagerPermissions);
+
+            $permissions = Permission::whereIn('name', $posOperatorManagerPermissions)
+                                     ->where('guard_name', 'sanctum')
+                                     ->get();
+            $posOperatorManager->givePermissionTo($permissions);
         }
     }
 }
