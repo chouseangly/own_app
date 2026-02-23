@@ -6,7 +6,8 @@ use App\Http\Controllers\Auth\ForgotPasswrodController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetNewPasswrodController;
 use App\Http\Controllers\Auth\SignupController;
-use App\Http\Controllers\Frontend\ProductCategoryController;
+use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Frontend\ProductCategoryController as FrontendProductCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,17 +59,35 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(functi
         Route::match(['put', 'patch'], '/{role}', [PermissionController::class, 'update'])->middleware('permission:edit_permissions');
     });
 
-    // Product Categories
-    Route::prefix('product-category')->group(function () {
+    // Admin Product Categories (Controlled by 'settings' permission in Controller)
+    Route::prefix('setting')->name('setting.')->group(function (){
+
+
+        Route::prefix('product-category')->group(function () {
         Route::get('/', [ProductCategoryController::class, 'index']);
-        Route::post('/', [ProductCategoryController::class, 'store'])->middleware('permission:add_category');
-        Route::match(['put', 'patch'], '/{productCategory}', [ProductCategoryController::class, 'update'])->middleware('permission:edit_category');
-        Route::delete('/{productCategory}', [ProductCategoryController::class, 'destroy'])->middleware('permission:delete_category');
         Route::get('/depth-tree', [ProductCategoryController::class, 'depthTree']);
         Route::get('/show/{productCategory}', [ProductCategoryController::class, 'show']);
+        Route::post('/', [ProductCategoryController::class, 'store']);
+        Route::match(['post', 'put', 'patch'], '/{productCategory}', [ProductCategoryController::class, 'update']);
+        Route::delete('/{productCategory}', [ProductCategoryController::class, 'destroy']);
+        Route::get('/tree', [ProductCategoryController::class, 'tree']);
         Route::get('/export', [ProductCategoryController::class, 'export']);
-        Route::post('/import', [ProductCategoryController::class, 'import']);
         Route::get('/download-attachment/{fileName}', [ProductCategoryController::class, 'downloadAttechment']);
+        Route::post('/import', [ProductCategoryController::class, 'import']);
+    });
+    });
+});
 
+/*
+|--------------------------------------------------------------------------
+| Frontend Routes (Publicly Accessible)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('frontend')->group(function () {
+    Route::prefix('product-category')->group(function () {
+        Route::get('/', [FrontendProductCategoryController::class, 'index']);
+        Route::get('/ancestors-and-self/{productCategory:slug}', [FrontendProductCategoryController::class, 'ancestorsAndSelf']);
+        Route::get('/tree', [FrontendProductCategoryController::class, 'tree']);
+        Route::get('/show/{productCategory:slug}', [FrontendProductCategoryController::class, 'show']);
     });
 });
