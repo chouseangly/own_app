@@ -61,10 +61,14 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(functi
     // Product Categories
     Route::prefix('product-category')->group(function () {
         Route::get('/', [ProductCategoryController::class, 'index']);
-        Route::post('/', [ProductCategoryController::class, 'store'])->middleware('permission:create_category');
+        Route::post('/', [ProductCategoryController::class, 'store'])->middleware('permission:add_category');
         Route::match(['put', 'patch'], '/{productCategory}', [ProductCategoryController::class, 'update'])->middleware('permission:edit_category');
         Route::delete('/{productCategory}', [ProductCategoryController::class, 'destroy'])->middleware('permission:delete_category');
         Route::get('/depth-tree', [ProductCategoryController::class, 'depthTree']);
         Route::get('/show/{productCategory}', [ProductCategoryController::class, 'show']);
+        Route::get('/export', [ProductCategoryController::class, 'export']);
+        Route::post('/import', [ProductCategoryController::class, 'import']);
+        Route::get('/download-attachment/{fileName}', [ProductCategoryController::class, 'downloadAttechment']);
+
     });
 });
