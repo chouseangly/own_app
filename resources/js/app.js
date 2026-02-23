@@ -6,6 +6,7 @@ import DefaultComponent from './DefaultComponent.vue';
 import store from './store'
 import router from './routes';
 import "vue-toastification/dist/index.css";
+import i18n from './i18n';
 const toastOptions = {
     timeout: 2000,
     closeOnClick: true,
@@ -27,5 +28,6 @@ const app = createApp(DefaultComponent);
 
 app.use(store); // Use the store
 app.use(router)
+app.use(i18n);
 app.use(Toast,toastOptions)
 app.mount('#app');

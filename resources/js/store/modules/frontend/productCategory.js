@@ -1,5 +1,5 @@
 import axios from "axios";
-import appService from "../../../services/appService";
+import appService from "../../../../services/appService";
 
 export const frontendProductCategory = {
     namespaced: true,
@@ -22,7 +22,7 @@ export const frontendProductCategory = {
     actions: {
         ancestorsAndSelf: function (context, payload) {
             return new Promise((resolve, reject) => {
-                axios.get(`/api/`).then((res) => {
+                axios.get(`/api/frontend/product-category/ancestors-and-self/${payload}`).then((res) => {
                     context.commit("ancestorsAndSelf", res.data.data);
                     resolve(res);
                 }).catch((err) => {
@@ -32,7 +32,7 @@ export const frontendProductCategory = {
         },
         trees: function (context, payload) {
             return new Promise((resolve, reject) => {
-                let url = `frontend/product-category/tree`;
+                let url = `/api/frontend/product-category/tree`;
                 axios.get(url).then((res) => {
                     context.commit("trees", res.data);
                     resolve(res);
@@ -43,7 +43,7 @@ export const frontendProductCategory = {
         },
         lists: function (context, payload) {
             return new Promise((resolve, reject) => {
-                let url = "frontend/product-category";
+                let url = "/api/frontend/product-category";
                 if (payload) {
                     url = url + appService.requestHandler(payload);
                 }
