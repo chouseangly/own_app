@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetNewPasswrodController;
 use App\Http\Controllers\Auth\SignupController;
 use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Frontend\SliderController as FrontendSliderController;
 use App\Http\Controllers\Frontend\ProductCategoryController as FrontendProductCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 | Authentication Routes
 |--------------------------------------------------------------------------
 */
+
 Route::prefix('')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/register', [SignupController::class, 'register']);
@@ -60,21 +63,29 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(functi
     });
 
     // Admin Product Categories (Controlled by 'settings' permission in Controller)
-    Route::prefix('setting')->name('setting.')->group(function (){
+    Route::prefix('setting')->name('setting.')->group(function () {
 
 
         Route::prefix('product-category')->group(function () {
-        Route::get('/', [ProductCategoryController::class, 'index']);
-        Route::get('/depth-tree', [ProductCategoryController::class, 'depthTree']);
-        Route::get('/show/{productCategory}', [ProductCategoryController::class, 'show']);
-        Route::post('/', [ProductCategoryController::class, 'store']);
-        Route::match(['post', 'put', 'patch'], '/{productCategory}', [ProductCategoryController::class, 'update']);
-        Route::delete('/{productCategory}', [ProductCategoryController::class, 'destroy']);
-        Route::get('/tree', [ProductCategoryController::class, 'tree']);
-        Route::get('/export', [ProductCategoryController::class, 'export']);
-        Route::get('/download-attachment/{fileName}', [ProductCategoryController::class, 'downloadAttechment']);
-        Route::post('/import', [ProductCategoryController::class, 'import']);
-    });
+            Route::get('/', [ProductCategoryController::class, 'index']);
+            Route::get('/depth-tree', [ProductCategoryController::class, 'depthTree']);
+            Route::get('/show/{productCategory}', [ProductCategoryController::class, 'show']);
+            Route::post('/', [ProductCategoryController::class, 'store']);
+            Route::match(['post', 'put', 'patch'], '/{productCategory}', [ProductCategoryController::class, 'update']);
+            Route::delete('/{productCategory}', [ProductCategoryController::class, 'destroy']);
+            Route::get('/tree', [ProductCategoryController::class, 'tree']);
+            Route::get('/export', [ProductCategoryController::class, 'export']);
+            Route::get('/download-attachment/{fileName}', [ProductCategoryController::class, 'downloadAttechment']);
+            Route::post('/import', [ProductCategoryController::class, 'import']);
+        });
+
+        Route::prefix('slider')->name('slider.')->group(function(){
+            Route::get('/',[SliderController::class,'index']);
+            Route::get('/show/slider',[SliderController::class,'show']);
+            Route::post('/',[SliderController::class,'store']);
+            Route::match(['post','put','patch'],'/{id}',[SliderController::class,'update']);
+            Route::delete('/{id}',[SliderController::class,'destroy']);
+        });
     });
 });
 
@@ -89,5 +100,9 @@ Route::prefix('frontend')->group(function () {
         Route::get('/ancestors-and-self/{productCategory:slug}', [FrontendProductCategoryController::class, 'ancestorsAndSelf']);
         Route::get('/tree', [FrontendProductCategoryController::class, 'tree']);
         Route::get('/show/{productCategory:slug}', [FrontendProductCategoryController::class, 'show']);
+    });
+
+    Route::prefix('slider')->name('slider.')->group(function(){
+        Route::get('/',[FrontendSliderController::class,'index']);
     });
 });

@@ -34,7 +34,7 @@ export const frontendProductCategory = {
             return new Promise((resolve, reject) => {
                 let url = `/api/frontend/product-category/tree`;
                 axios.get(url).then((res) => {
-                    context.commit("trees", res.data);
+                    context.commit("trees", res.data.data);
                     resolve(res);
                 }).catch((err) => {
                     reject(err);
