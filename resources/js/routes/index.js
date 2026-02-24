@@ -6,7 +6,8 @@ const baseRoutes = [
         path: '/',
         redirect: { name: 'frontend.home' },
         name: 'root'
-    }
+    },
+    
 ];
 
 const routes = baseRoutes.concat(authRoute);
