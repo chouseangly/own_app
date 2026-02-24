@@ -54,7 +54,7 @@ class ProductCategoryService{
     public function tree()
     {
         try {
-            return ProductCategory::active()->tree()->get();
+            return ProductCategory::active()->tree()->get()->toTree();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);

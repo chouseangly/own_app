@@ -18,7 +18,8 @@ class ProductCategoryResource extends JsonResource{
             'status' => $this->status,
             'parent_id' => $this->parent_id,
             'thumb' => $this->thumb,
-            'cover' => $this->cover
+            'cover' => $this->cover,
+            'children' => ProductCategoryResource::collection($this->whenLoaded('children')),
         ];
     }
 }
