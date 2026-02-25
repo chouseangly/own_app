@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^6.0.4",
+        "swiper": "^12.1.2",
         "vue": "^3.5.28",
         "vue-element-loading": "^3.0.1",
         "vue-i18n": "^9.14.5",

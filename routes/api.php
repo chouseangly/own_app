@@ -79,12 +79,12 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(functi
             Route::post('/import', [ProductCategoryController::class, 'import']);
         });
 
-        Route::prefix('slider')->name('slider.')->group(function(){
-            Route::get('/',[SliderController::class,'index']);
-            Route::get('/show/slider',[SliderController::class,'show']);
-            Route::post('/',[SliderController::class,'store']);
-            Route::match(['post','put','patch'],'/{id}',[SliderController::class,'update']);
-            Route::delete('/{id}',[SliderController::class,'destroy']);
+        Route::prefix('slider')->name('slider.')->group(function () {
+            Route::get('/', [SliderController::class, 'index']);
+            Route::get('/show/{slider}', [SliderController::class, 'show']); // Changed from show/slider
+            Route::post('/', [SliderController::class, 'store']);
+            Route::match(['post', 'put', 'patch'], '/{slider}', [SliderController::class, 'update']); // Changed from {id}
+            Route::delete('/{slider}', [SliderController::class, 'destory']); // Changed from {id}
         });
     });
 });
@@ -102,7 +102,7 @@ Route::prefix('frontend')->group(function () {
         Route::get('/show/{productCategory:slug}', [FrontendProductCategoryController::class, 'show']);
     });
 
-    Route::prefix('slider')->name('slider.')->group(function(){
-        Route::get('/',[FrontendSliderController::class,'index']);
+    Route::prefix('slider')->name('slider.')->group(function () {
+        Route::get('/', [FrontendSliderController::class, 'index']);
     });
 });

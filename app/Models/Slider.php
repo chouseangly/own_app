@@ -7,9 +7,10 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Slider extends Model implements HasMedia{
-
+class Slider extends Model implements HasMedia
+{
     use InteractsWithMedia;
+
     protected $table = 'sliders';
 
     protected $fillable = [
@@ -24,19 +25,26 @@ class Slider extends Model implements HasMedia{
         'title' => 'string',
         'link' => 'string',
         'description' => 'string',
-        'status' => 'string'
+        'status' => 'integer'
     ];
 
-    public function getImageAttribute() {
-        if(!empty($this->getFirstMedia('slider'))){
-            $slider = $this->getMedia('slider')->last();
-            return $slider->getUrl('cover');
+    public function getImageAttribute()
+    {
+        // Safely get a single Media object
+        $media = $this->getFirstMedia('slider');
+
+        if ($media) {
+            return $media->getUrl('cover');
         }
+
         return asset('images/required/profile.png');
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('cover')->fit(Fit::Fill,1689,600)->keepOriginalImageFormat()->sharpen(10);
+        $this->addMediaConversion('cover')
+            ->fit(Fit::Fill, 1689, 600)
+            ->keepOriginalImageFormat()
+            ->nonQueued(); // Recommended for immediate processing
     }
 }

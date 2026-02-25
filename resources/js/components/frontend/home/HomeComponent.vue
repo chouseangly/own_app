@@ -1,9 +1,9 @@
 <template >
-    <SliderComponent />
+   <SliderComponent />
 </template>
 <script>
-import SliderComponent from '../../admin/settings/slider/SliderComponent.vue';
 
+import SliderComponent from './SliderComponent.vue';
 export default {
     name: 'HomeComponent',
     components: {
