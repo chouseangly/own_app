@@ -1,9 +1,9 @@
-<template >
-   <SliderComponent />
+<template>
+        <SliderComponent />
 
-   <CategoryComponent />
+        <CategoryComponent />
 
-   <ProductBrandComponent />
+        <ProductBrandComponent />
 </template>
 <script>
 
@@ -20,4 +20,3 @@ export default {
     }
 }
 </script>
-

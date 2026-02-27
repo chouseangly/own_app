@@ -1,27 +1,96 @@
 <template>
-    <LoadingComponent :props="loading" />
+  <LoadingComponent :props="loading" />
 
-    <section class="mb-3 sm:mb-10" v-if="brands.length > 1">
-        <div class="mx-auto max-w-screen-xl">
-            <h2 class="capitalize text-2xl sm:text-4xl font-bold -mb-10">
-                {{ $t('label.popular_brands') }}
-            </h2>
-            <Swiper dir="ltr" :speed="1000" :loop="true" :navigation="true" :modules="modules" class="navigate-swiper" :breakpoints="breakpoints">
-                <SwiperSlide v-for="brand in brands" class="mobile:!w-[120px]" :key="brand.id">
-                    <router-link :to="{name: 'frontend.product', query:{ brand: brand.id }}" class="w-full rounded-2xl shadow-xs group border border-gray-100">
-                        <figure class="w-full h-[120px] flex items-center justify-center">
-                            <img :src="brand.cover" alt="brand" class="w-14">
-                        </figure>
-                        <span class="text-sm sm:text-lg font-medium capitalize text-center pb-3 block group-hover:text-primary">
-                                {{ brand.name }}
-                            </span>
-                    </router-link>
-                </SwiperSlide>
-            </Swiper>
-        </div>
-    </section>
+  <section class="mb-6 sm:mb-12" v-if="brands.length > 1">
+     <div class="mx-auto max-w-screen-xl">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="capitalize text-2xl sm:text-4xl font-bold">
+        {{ $t('label.popular_brands') }}
+      </h2>
+
+      <!-- Navigation Buttons -->
+      <div class="flex gap-4">
+        <button
+          class="custom-prev
+                 w-10 h-10 bg-red-200 hover:bg-red-400
+                 rounded-full flex items-center justify-center
+                 shadow-sm transition"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="w-5 h-5 text-red-500 hover:text-white"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke="currentColor"
+               stroke-width="2">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <button
+          class="custom-next
+                 w-10 h-10 bg-red-200 hover:bg-red-400
+                 rounded-full flex items-center justify-center
+                 shadow-sm transition"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="w-5 h-5 text-red-500 hover:text-white"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke="currentColor"
+               stroke-width="2">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+      <!-- Swiper -->
+      <Swiper
+        dir="ltr"
+        :modules="modules"
+        :loop="true"
+        :speed="800"
+        :navigation="{ prevEl: '.custom-prev', nextEl: '.custom-next' }"
+        :breakpoints="breakpoints"
+        class="py-4"
+      >
+        <SwiperSlide
+          v-for="brand in brands"
+          :key="brand.id"
+          class="flex flex-col items-center text-center w-28 sm:w-32 md:w-36"
+        >
+          <router-link
+            :to="{ name: 'frontend.product', query: { brand: brand.id } }"
+            class="flex flex-col items-center group"
+          >
+            <!-- Brand Card -->
+            <div class="w-full h-28 sm:h-32 md:h-36 bg-white rounded-xl
+                        shadow-sm flex items-center justify-center
+                        transition-transform duration-300 group-hover:scale-105">
+              <img
+                :src="brand.cover"
+                alt="brand"
+                class="max-h-14 object-contain"
+              />
+            </div>
+
+            <span class="text-sm sm:text-base mt-2 truncate max-w-full
+                         group-hover:text-primary transition-colors">
+              {{ brand.name }}
+            </span>
+          </router-link>
+        </SwiperSlide>
+      </Swiper>
+
+    </div>
+  </section>
 </template>
-
 <script>
 import statusEnum from "../../../../enums/modules/statusEnum";
 import LoadingComponent from "../../admin/components/LoadingComponent.vue";
