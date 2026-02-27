@@ -1,5 +1,6 @@
 import authRoute from './modules/authRoute';
 import { createRouter, createWebHistory } from 'vue-router';
+import frontendRoute from './modules/frontendRoute';
 
 const baseRoutes = [
     {
@@ -7,10 +8,13 @@ const baseRoutes = [
         redirect: { name: 'frontend.home' },
         name: 'root'
     },
-    
+
 ];
 
-const routes = baseRoutes.concat(authRoute);
+const routes = baseRoutes.concat(
+    authRoute,
+    frontendRoute
+);
 
 const router = createRouter({
     history: createWebHistory(),

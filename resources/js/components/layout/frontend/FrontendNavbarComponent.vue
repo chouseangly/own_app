@@ -1,7 +1,7 @@
 <template>
     <header
         :class="isSticky === true ? 'fixed top-0 left-0 z-30 w-full mb-5 sm:mb-8 shadow-xs bg-white' : 'mb-5 sm:mb-8 shadow-xs bg-white'">
-        <div class="container py-3.5 px-4 lg:py-0">
+        <div class="mx-auto max-w-screen-xl py-3.5 px-4 lg:py-2">
             <div class="flex items-center justify-between gap-5">
                 <div class="flex items-center flex-shrink-0 gap-5">
                     <button type="button" class="leading-none block lg:hidden"
@@ -19,7 +19,7 @@
                     @click.prevent="showTarget('search', 'search-active')">
                     <i class="lab-line-search text-xl"></i>
                 </button>
-                <nav class="header-nav hidden lg:block">
+                <nav class="header-nav hidden lg:block font-bold">
                     <ul class="header-nav-list flex gap-6">
                         <li class="header-nav-item">
                             <router-link class="header-nav-menu"

@@ -21,7 +21,7 @@ class ProductCategoryController extends Controller
 
     public function ancestorAndSelf(ProductCategory $productCategory){
         try{
-            return ProductCategoryResource::collection($this->productCategoryService->ancestorAndSelf($productCategory));
+            return ProductCategoryResource::collection($this->productCategoryService->ancestorsAndSelf($productCategory));
         }catch(Exception $exception){
             return response(['status' => false, 'message' => $exception->getMessage()]);
         }

@@ -4,6 +4,7 @@ import createPersistedState from "vuex-persistedstate"; // Ensure this is instal
 import { frontendProductCategory } from "./modules/frontend/productCategory";
 import { slider } from "./modules/slider";
 import { frontendSlider } from "./modules/frontend/frontendSlider";
+import { frontendProductBrand } from "./modules/frontend/frontendProductBrand";
 
 export default createStore({
     state: {},
@@ -13,7 +14,8 @@ export default createStore({
         auth ,
         frontendProductCategory,
         slider,
-        frontendSlider
+        frontendSlider,
+        frontendProductBrand
     },
 
     plugins: [

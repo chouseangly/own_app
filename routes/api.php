@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProductBrandController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Auth\ForgotPasswrodController;
 use App\Http\Controllers\Auth\LoginController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Frontend\SliderController as FrontendSliderController;
 use App\Http\Controllers\Frontend\ProductCategoryController as FrontendProductCategoryController;
+use App\Http\Controllers\Frontend\ProductBrandController as FrontendProductBrandController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -81,10 +83,18 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(functi
 
         Route::prefix('slider')->name('slider.')->group(function () {
             Route::get('/', [SliderController::class, 'index']);
-            Route::get('/show/{slider}', [SliderController::class, 'show']); // Changed from show/slider
+            Route::get('/show/{slider}', [SliderController::class, 'show']);
             Route::post('/', [SliderController::class, 'store']);
             Route::match(['post', 'put', 'patch'], '/{slider}', [SliderController::class, 'update']); // Changed from {id}
             Route::delete('/{slider}', [SliderController::class, 'destory']); // Changed from {id}
+        });
+
+        Route::prefix('product-brand')->name('product-brand.')->group(function(){
+            Route::get('/',[ProductBrandController::class,'index']);
+            Route::get('/show/{productBrand}',[ProductBrandController::class,'show']);
+            Route::post('/',[ProductBrandController::class,'store']);
+            Route::match(['post', 'put','patch'], '/{productBrand}',[ProductBrandController::class,'update']);
+            Route::delete('/{productBrand}',[ProductBrandController::class,'destroy']);
         });
     });
 });
@@ -104,5 +114,8 @@ Route::prefix('frontend')->group(function () {
 
     Route::prefix('slider')->name('slider.')->group(function () {
         Route::get('/', [FrontendSliderController::class, 'index']);
+    });
+     Route::prefix('product-brand')->name('product-brand.')->group(function () {
+        Route::get('/', [FrontendProductBrandController::class, 'index']);
     });
 });
