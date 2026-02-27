@@ -1,8 +1,8 @@
 <template>
     <LoadingComponent :props="loading" />
 
-    <section class="mb-3 sm:mb-10" v-if="brands.length > 0">
-        <div class="container">
+    <section class="mb-3 sm:mb-10" v-if="brands.length > 1">
+        <div class="mx-auto max-w-screen-xl">
             <h2 class="capitalize text-2xl sm:text-4xl font-bold -mb-10">
                 {{ $t('label.popular_brands') }}
             </h2>

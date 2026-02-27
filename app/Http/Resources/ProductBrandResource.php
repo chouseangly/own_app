@@ -23,7 +23,6 @@ class ProductBrandResource extends JsonResource
             'status'      => $this->status,
             'thumb'       => $this->thumb,
             'cover'       => $this->cover,
-            'image'       => $this->image
         ];
     }
 }

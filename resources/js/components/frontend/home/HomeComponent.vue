@@ -8,8 +8,8 @@
 <script>
 
 import CategoryComponent from './CategoryComponent.vue';
-import ProductBrandComponent from './ProductBrandComponent.vue';
 import SliderComponent from './SliderComponent.vue';
+import ProductBrandComponent from './ProductBrandComponent.vue';
 export default {
     name: 'HomeComponent',
     components: {

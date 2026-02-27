@@ -9,7 +9,6 @@ use Exception;
 use App\Libraries\QueryExceptionLibrary;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use PhpParser\Node\Expr\FuncCall;
 
 class ProductBrandService{
 
@@ -62,7 +61,7 @@ class ProductBrandService{
             $productBrand = ProductBrand::create($request->validated() + ['slug' => Str::slug($request->slug)]);
             if($request->image){
                 $productBrand->addMediaFromRequest('image')
-                ->toMediaCollection('product_brand');
+                ->toMediaCollection('product-brand');
             }
             return $productBrand;
         }catch (Exception $e) {
@@ -75,8 +74,8 @@ class ProductBrandService{
         try{
             $productBrand->update($request->validated() + ['slug' => Str::slug($request->slug)]);
             if($request->image){
-                $productBrand->clearMediaCollection('product_brand');
-                $productBrand->addMediaFromRequest('image')->toMediaCollection('product_brand');
+                $productBrand->clearMediaCollection('product-brand');
+                $productBrand->addMediaFromRequest('image')->toMediaCollection('product-brand');
             }
             return $productBrand;
         }catch (Exception $e) {
