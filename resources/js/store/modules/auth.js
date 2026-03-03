@@ -60,7 +60,7 @@ export const auth = {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 commit('AUTH_SUCCESS', { token, user });
                 toast.success("Welcome back!");
-                return response.data;
+                return response.data.data;
             } catch (error) {
                 localStorage.removeItem('token');
                 commit('AUTH_ERROR');
@@ -85,6 +85,21 @@ export const auth = {
                 throw error
             }
         },
+        async updateUser({ commit }) {
+            try {
+                if (localStorage.getItem('token')) {
+                    const response = await axios.get('/api/profile');
+                    const user = response.data.data;
+                    commit('AUTH_SUCCESS', {
+                        token: localStorage.getItem('token'),
+                        user: user
+                    });
+                }
+            } catch (error) {
+                localStorage.removeItem('token');
+                commit('LOGOUT');
+            }
+        },
         async resetPassword({ commit }, payload) {
             try {
                 const response = await axios.post('/api/reset-password', payload);
@@ -98,6 +113,15 @@ export const auth = {
             localStorage.removeItem('token');
             delete axios.defaults.headers.common['Authorization'];
             commit('LOGOUT');
+        },
+
+        async getMe({ commit }) {
+            try {
+                const response = await axios.get('/api/me');
+                commit('AUTH_SUCCESS', { token: localStorage.getItem('token'), user: response.data.data });
+            } catch (error) {
+                commit('LOGOUT');
+            }
         }
     }
 }

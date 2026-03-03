@@ -335,17 +335,31 @@ export default {
             }
         };
     },
-    computed: {
-       logged() { return this.$store.getters['auth/authStatus']; },
+   computed: {
+        logged() { return this.$store.getters['auth/authStatus']; },
+        profile() { return this.$store.getters['auth/authInfo'] || {}; },
         setting() { return this.$store.getters['frontendSetting/lists'] || {}; },
         categories() { return this.$store.getters['frontendProductCategory/trees'] || []; },
         language() { return this.$store.getters['frontendLanguage/show'] || {}; },
         languages() { return this.$store.getters['frontendLanguage/lists'] || []; },
         wishlists() { return this.$store.getters['frontendWishlist/lists'] || []; },
         carts() { return this.$store.getters['frontendCart/lists'] || []; },
-        profile() { return this.$store.getters['auth/authInfo'] || {}; },
-        authDefaultPermission() { return this.$store.getters.authDefaultPermission || {}; },
-        defaultMenu() { return this.$store.getters.authDefaultMenu || {}; }
+
+        // Ensure these match your actual store structure
+        authDefaultPermission() { return this.$store.getters['auth/authDefaultPermission'] || {}; },
+        defaultMenu() { return this.$store.getters['auth/authDefaultMenu'] || {}; }
+    },
+    mounted() {
+        this.currentRoute = this.$route.path;
+
+        // 1. Restore User Session if token exists
+        if (this.logged && !this.profile.name) {
+            this.$store.dispatch('auth/updateUser');
+        }
+
+        // 2. Fetch other data
+        this.$store.dispatch('frontendProductCategory/trees');
+        this.$store.dispatch('frontendWishlist/lists');
     },
     // FIXED: Watcher to set initial active tab once data is loaded
     watch: {
@@ -357,11 +371,6 @@ export default {
             },
             immediate: true
         }
-    },
-    mounted() {
-        this.currentRoute = this.$route.path;
-        this.$store.dispatch('frontendProductCategory/trees').catch(err => console.error("Vuex Action Error:", err));
-        this.$store.dispatch('frontendWishlist/lists');
     },
     methods: {
         showTarget(id, cClass) { targetService.showTarget(id, cClass); },

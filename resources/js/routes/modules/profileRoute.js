@@ -20,5 +20,15 @@ export default [
             permissionUrl: "",
             breadcrumb: "change_password",
         },
-    }
+    },
+    {
+        path: '/order-history',
+        name: 'frontend.account.orderHistory', // This must exist
+        component: () => import('../../components/frontend/account/OrderHistoryComponent.vue'),
+    },
+    {
+        path: '/return-orders',
+        name: 'frontend.account.returnOrders', // This must exist
+        component: () => import('../../components/frontend/account/ReturnOrderComponent.vue'),
+    },
 ];
