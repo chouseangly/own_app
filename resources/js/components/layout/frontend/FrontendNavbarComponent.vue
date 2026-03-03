@@ -336,14 +336,14 @@ export default {
         };
     },
     computed: {
-        logged() { return this.$store.getters.authStatus; },
+       logged() { return this.$store.getters['auth/authStatus']; },
         setting() { return this.$store.getters['frontendSetting/lists'] || {}; },
         categories() { return this.$store.getters['frontendProductCategory/trees'] || []; },
         language() { return this.$store.getters['frontendLanguage/show'] || {}; },
         languages() { return this.$store.getters['frontendLanguage/lists'] || []; },
         wishlists() { return this.$store.getters['frontendWishlist/lists'] || []; },
         carts() { return this.$store.getters['frontendCart/lists'] || []; },
-        profile() { return this.$store.getters.authInfo || {}; },
+        profile() { return this.$store.getters['auth/authInfo'] || {}; },
         authDefaultPermission() { return this.$store.getters.authDefaultPermission || {}; },
         defaultMenu() { return this.$store.getters.authDefaultMenu || {}; }
     },
@@ -370,10 +370,10 @@ export default {
         checkIsPathAndRoutePathSame(path) { return this.currentRoute === path; },
         resetSearch() { this.searchProduct = ""; },
         logout() {
-            this.$store.dispatch("logout").then(() => {
-                this.$store.dispatch("frontendWishlist/reset");
-                this.$router.push({ name: "frontend.home" });
-            });
+           this.$store.dispatch("auth/logout").then(() => {
+            this.$store.dispatch("frontendWishlist/reset");
+            this.$router.push({ name: "frontend.home" });
+        });
         }
     }
 };

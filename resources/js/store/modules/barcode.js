@@ -1,7 +1,6 @@
 
 import axios from 'axios';
 import appService from '../../../services/appService';
-import { k } from 'vue-router/dist/router-CWoNjPRp.mjs';
 export const barcode = {
     namespaced : true,
     state:{
@@ -27,7 +26,7 @@ export const barcode = {
         },
         actions:{
             lists: function(context,payload){
-                return new Promise((resolve,reject){
+                return new Promise((resolve,reject)=>{
                      let url = '/api/admin/setting/barcode';
                     if(payload){
                         url = url + appService.requestHandler(payload)

@@ -9,6 +9,10 @@ export const auth = {
         token: localStorage.getItem('token') || null,
         status: ''
     },
+    getters: { // <--- Add this block
+        authStatus: (state) => !!state.token,
+        authInfo: (state) => state.user,
+    },
     mutations: {
         AUTH_SUCCESS(state, { token, user }) {
             state.status = 'success';
@@ -88,6 +92,12 @@ export const auth = {
             } catch (error) {
                 throw error;
             }
+        },
+
+        async logout({ commit }) {
+            localStorage.removeItem('token');
+            delete axios.defaults.headers.common['Authorization'];
+            commit('LOGOUT');
         }
     }
 }
