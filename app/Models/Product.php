@@ -176,7 +176,11 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(ProductCategory::class, 'product_category_id', 'id');
     }
 
-    
+    public function brand(){
+        return $this->belongsTo(ProductBrand::class,'product_brand_id','id');
+    }
+
+
 
 
 }

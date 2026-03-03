@@ -12,7 +12,7 @@
       <!-- Navigation Buttons -->
       <div class="flex gap-4">
         <button
-        class="custom-prev -translate-y-1/2 z-10
+        class="cate-prev -translate-y-1/2
                w-10 h-10 bg-red-200 hover:bg-red-400 rounded-full flex items-center justify-center
                shadow-sm transition "
       >
@@ -23,7 +23,7 @@
       </button>
 
       <button
-        class="custom-next -translate-y-1/2 z-10
+        class="cate-next -translate-y-1/2
                w-10 h-10 bg-red-200 hover:bg-red-400 rounded-full flex items-center justify-center
                shadow-sm transition "
       >
@@ -37,14 +37,17 @@
       </div>
       <!-- Swiper -->
       <Swiper
+        v-if="categories.length > 0"
+        :key="categories.length"
         :modules="modules"
-        :loop="true"
-        :navigation="{ prevEl: '.custom-prev', nextEl: '.custom-next' }"
+        :loop="categories.length > 6"
+        :navigation="{ prevEl: '.cate-prev', nextEl: '.cate-next' }"
         :autoplay="{ delay: 3000 }"
         :speed="800"
         :breakpoints="breakpoints"
         class="category-swiper"
       >
+
         <SwiperSlide
           v-for="category in categories"
           :key="category.id"
@@ -59,7 +62,7 @@
               alt="category"
               class="w-full h-28 sm:h-32 md:h-36 object-cover rounded-xl mb-2"
             />
-            <span class="text-sm sm:text-base truncate max-w-full group-hover:text-primary">
+            <span class="text-sm sm:text-base truncate max-w-full group-hover:text-red-400">
               {{ category.name }}
             </span>
           </router-link>

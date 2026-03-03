@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BarcodeController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductBrandController;
 use App\Http\Controllers\Admin\RoleController;
@@ -9,9 +10,11 @@ use App\Http\Controllers\Auth\ResetNewPasswrodController;
 use App\Http\Controllers\Auth\SignupController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Frontend\SliderController as FrontendSliderController;
 use App\Http\Controllers\Frontend\ProductCategoryController as FrontendProductCategoryController;
 use App\Http\Controllers\Frontend\ProductBrandController as FrontendProductBrandController;
+use App\Http\Controllers\Frontend\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,9 +42,16 @@ Route::prefix('')->group(function () {
 | Profile / User Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::prefix('profile')->name('profile.')->middleware(['installed', 'apiKey', 'auth:sanctum', 'localization'])->group(function () {
+    Route::get('/', [ProfileController::class, 'profile']);
+    Route::match(['post', 'put', 'patch'], '/', [ProfileController::class, 'update']);
+    Route::match(['put', 'patch'], '/change-password', [ProfileController::class, 'changePassword']);
+    Route::post('/change-image', [ProfileController::class, 'changeImage']);
 });
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +106,19 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:Admin'])->group(functi
             Route::match(['post', 'put','patch'], '/{productBrand}',[ProductBrandController::class,'update']);
             Route::delete('/{productBrand}',[ProductBrandController::class,'destroy']);
         });
+
+        Route::prefix('unit')->name('unit.')->group(function(){
+            Route::get('/',[UnitController::class,'index']);
+            Route::get('/show/{unit}',[UnitController::class,'show']);
+            Route::post('/',[UnitController::class,'store']);
+            Route::match(['post', 'put', 'patch'], '/{unit}', [UnitController::class,'update']);
+            Route::delete('/{unit}',[UnitController::class,'destroy']);
+        });
+
+        Route::prefix('barcode')->name('barcode.')->group(function(){
+            Route::get('/',[BarcodeController::class,'index']);
+        });
+
     });
 });
 
@@ -118,4 +141,6 @@ Route::prefix('frontend')->group(function () {
      Route::prefix('product-brand')->name('product-brand.')->group(function () {
         Route::get('/', [FrontendProductBrandController::class, 'index']);
     });
+
+
 });

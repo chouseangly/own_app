@@ -5,6 +5,8 @@ import { frontendProductCategory } from "./modules/frontend/productCategory";
 import { slider } from "./modules/slider";
 import { frontendSlider } from "./modules/frontend/frontendSlider";
 import { frontendProductBrand } from "./modules/frontend/frontendProductBrand";
+import { barcode } from "./modules/barcode";
+import { frontendEditProfile } from "./modules/frontend/frontendEditProfile";
 
 export default createStore({
     state: {},
@@ -15,7 +17,9 @@ export default createStore({
         frontendProductCategory,
         slider,
         frontendSlider,
-        frontendProductBrand
+        frontendProductBrand,
+        barcode,
+        frontendEditProfile
     },
 
     plugins: [
