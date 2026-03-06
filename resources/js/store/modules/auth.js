@@ -54,12 +54,16 @@ export const auth = {
         },
         async login({ commit }, credentails) {
             try {
-                const response = await axios.post('/api/login', credentails);
-                const { token, user } = response.data;
+                const response = await axios.post('/api/login', credentials);
+                // Fix: Extract directly from response.data based on your JSON structure
+                const token = response.data.token;
+                const user = response.data.user;
+
                 localStorage.setItem('token', token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
                 commit('AUTH_SUCCESS', { token, user });
-                return response.data.data;
+                return response.data;
             } catch (error) {
                 localStorage.removeItem('token');
                 commit('AUTH_ERROR');
@@ -84,10 +88,12 @@ export const auth = {
             }
         },
         async updateUser({ commit }) {
-            try {
+           try {
                 if (localStorage.getItem('token')) {
                     const response = await axios.get('/api/profile');
-                    const user = response.data.data;
+                    // Fix: If your profile API matches login structure, use response.data.user
+                    // If it returns only user data, use response.data.data
+                    const user = response.data.user || response.data.data;
                     commit('AUTH_SUCCESS', {
                         token: localStorage.getItem('token'),
                         user: user

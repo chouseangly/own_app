@@ -135,7 +135,7 @@
                     <div v-if="logged"
                         class="w-60 absolute top-15 ltr:-right-10 rtl:-left-10  z-10 rounded-2xl overflow-hidden shadow-card bg-white transition-all duration-300 origin-top scale-y-0 group-hover:scale-y-100">
                         <div class="flex items-center gap-3 p-4 border-b border-[#EFF0F6]">
-                            <img src="images/required/profile.png" alt="avatar"
+                            <img :src="profile.image || 'images/required/profile.png'" alt="avatar"
                                 class="w-11 h-11 rounded-full object-cover flex-shrink-0">
                             <dl class="w-full">
                                 <dt class="font-semibold capitalize whitespace-nowrap mb-0.5">
