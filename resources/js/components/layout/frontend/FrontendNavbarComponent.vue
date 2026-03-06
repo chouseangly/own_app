@@ -121,13 +121,13 @@
                 </div>
                 <!-- Wishlist Start -->
 
-                <router-link class="hidden lg:block relative" :to="{ name: 'frontend.home' }">
+                <!-- <router-link class="hidden lg:block relative" :to="{ name: 'frontend.home' }">
                     <i class="lab-line-heart text-xl"></i>
                     <span v-if="wishlists.length > 0"
                         class="absolute top-2 ltr:-right-2 rtl:-left-2 text-[10px] font-medium h-4 px-1 !leading-[14px] text-center rounded-full border border-white text-white bg-primary">
                         {{ wishlists.length }}
                     </span>
-                </router-link>
+                </router-link> -->
                 <!-- WishList End -->
                 <!-- My Account Start -->
                 <div class="relative hidden lg:block group">
@@ -135,7 +135,7 @@
                     <div v-if="logged"
                         class="w-60 absolute top-15 ltr:-right-10 rtl:-left-10  z-10 rounded-2xl overflow-hidden shadow-card bg-white transition-all duration-300 origin-top scale-y-0 group-hover:scale-y-100">
                         <div class="flex items-center gap-3 p-4 border-b border-[#EFF0F6]">
-                            <img :src="profile.image" alt="avatar"
+                            <img src="images/required/profile.png" alt="avatar"
                                 class="w-11 h-11 rounded-full object-cover flex-shrink-0">
                             <dl class="w-full">
                                 <dt class="font-semibold capitalize whitespace-nowrap mb-0.5">

@@ -59,12 +59,10 @@ export const auth = {
                 localStorage.setItem('token', token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 commit('AUTH_SUCCESS', { token, user });
-                toast.success("Welcome back!");
                 return response.data.data;
             } catch (error) {
                 localStorage.removeItem('token');
                 commit('AUTH_ERROR');
-                toast.error("Invalid credentials.");
                 throw error;
             }
         },

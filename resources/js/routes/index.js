@@ -1,6 +1,7 @@
 import authRoute from './modules/authRoute';
 import { createRouter, createWebHistory } from 'vue-router';
 import frontendRoute from './modules/frontendRoute';
+import profileRoute from './modules/profileRoute';
 
 const baseRoutes = [
     {
@@ -13,7 +14,8 @@ const baseRoutes = [
 
 const routes = baseRoutes.concat(
     authRoute,
-    frontendRoute
+    frontendRoute,
+    profileRoute
 );
 
 const router = createRouter({
