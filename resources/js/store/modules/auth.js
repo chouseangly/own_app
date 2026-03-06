@@ -90,19 +90,28 @@ export const auth = {
             }
         },
         async updateUser({ commit }) {
-           try {
-                if (localStorage.getItem('token')) {
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    // CRITICAL: Set header manually before the profile call
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
                     const response = await axios.get('/api/profile');
-                    // Fix: If your profile API matches login structure, use response.data.user
-                    // If it returns only user data, use response.data.data
-                    const user = response.data.user || response.data.data;
+
+                    /* FIX: Based on your UserResource.php,
+                       Laravel Resources wrap data in a 'data' key.
+                    */
+                    const user = response.data.data;
+
                     commit('AUTH_SUCCESS', {
-                        token: localStorage.getItem('token'),
+                        token: token,
                         user: user
                     });
                 }
             } catch (error) {
+                console.error("Profile fetch failed:", error);
                 localStorage.removeItem('token');
+                delete axios.defaults.headers.common['Authorization'];
                 commit('LOGOUT');
             }
         },

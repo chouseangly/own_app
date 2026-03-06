@@ -29,5 +29,10 @@ const app = createApp(DefaultComponent);
 app.use(store); // Use the store
 app.use(router)
 app.use(i18n);
-app.use(Toast,toastOptions)
+app.use(Toast,toastOptions);
+
+// FIX: Fetch user profile on startup if token exists
+if (localStorage.getItem('token')) {
+    store.dispatch('auth/updateUser');
+}
 app.mount('#app');

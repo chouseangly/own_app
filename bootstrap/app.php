@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        'installed' => \App\Http\Middleware\InstalledMiddleware::class, // Add this
+        'apiKey'             => \App\Http\Middleware\ApiKeyMiddleware::class, // Ensure this file exists
+        'localization'       => \App\Http\Middleware\localization::class
+
     ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
