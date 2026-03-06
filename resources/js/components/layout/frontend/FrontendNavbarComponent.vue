@@ -150,7 +150,7 @@
                             <router-link
                                 v-if="profile.role_id !== enums.roleEnum.CUSTOMER && Object.keys(authDefaultPermission).length > 0"
                                 class="flex items-center gap-3 px-4 py-2 transition-all duration-500 hover:bg-gray-100"
-                                :to="{ name:'frontend.home' }">
+                                :to="{ name: 'frontend.home' }">
                                 <i class="text-sm text-[#A0A3BD]" :class="defaultMenu?.icon"></i>
                                 <span class="text-sm font-medium capitalize whitespace-nowrap">
                                     {{ $t('menu.' + defaultMenu?.language) }}
@@ -286,7 +286,7 @@
                 {{ orderNotificationMessage }}
                 <span class="block">{{ $t('message.please_check_your_order_list') }}</span>
             </h3>
-            <router-link :to="{ name:'frontend.home' }"
+            <router-link :to="{ name: 'frontend.home' }"
                 class="db-btn h-[38px] shadow-[0px_6px_10px_rgba(255,_0,_107,_0.24)] bg-primary text-white">
                 {{ $t('button.let_me_check') }}
             </router-link>
@@ -335,7 +335,7 @@ export default {
             }
         };
     },
-   computed: {
+    computed: {
         logged() { return this.$store.getters['auth/authStatus']; },
         profile() { return this.$store.getters['auth/authInfo'] || {}; },
         setting() { return this.$store.getters['frontendSetting/lists'] || {}; },
@@ -379,10 +379,10 @@ export default {
         checkIsPathAndRoutePathSame(path) { return this.currentRoute === path; },
         resetSearch() { this.searchProduct = ""; },
         logout() {
-           this.$store.dispatch("auth/logout").then(() => {
-            this.$store.dispatch("frontendWishlist/reset");
-            this.$router.push({ name: "frontend.home" });
-        });
+            this.$store.dispatch("auth/logout").then(() => {
+                this.$store.dispatch("frontendWishlist/reset");
+                this.$router.push({ name: "frontend.home" });
+            });
         }
     }
 };

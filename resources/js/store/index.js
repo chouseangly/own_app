@@ -7,6 +7,13 @@ import { frontendSlider } from "./modules/frontend/frontendSlider";
 import { frontendProductBrand } from "./modules/frontend/frontendProductBrand";
 import { barcode } from "./modules/barcode";
 import { frontendEditProfile } from "./modules/frontend/frontendEditProfile";
+import axios from "axios";
+
+// ADD THIS BLOCK — restores auth header on every page refresh
+const token = localStorage.getItem('token');
+if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 export default createStore({
     state: {},

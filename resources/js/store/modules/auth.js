@@ -12,6 +12,8 @@ export const auth = {
     getters: { // <--- Add this block
         authStatus: (state) => !!state.token,
         authInfo: (state) => state.user,
+         authDefaultPermission: (state) => state.user?.permissions || {},
+    authDefaultMenu: (state) => state.user?.default_menu || null,
     },
     mutations: {
         AUTH_SUCCESS(state, { token, user }) {
@@ -54,7 +56,7 @@ export const auth = {
         },
         async login({ commit }, credentails) {
             try {
-                const response = await axios.post('/api/login', credentials);
+                const response = await axios.post('/api/login', credentails);
                 // Fix: Extract directly from response.data based on your JSON structure
                 const token = response.data.token;
                 const user = response.data.user;
