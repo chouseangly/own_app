@@ -1,3 +1,8 @@
+import ProfileChangePasswordComponent from '../../components/admin/components/profile/ProfileChangePasswordComponent.vue';
+import ProfileEditProfileComponent from '../../components/admin/components/profile/ProfileEditProfileComponent.vue';
+import OrderHistoryComponent from '../../components/frontend/account/orderHistory/OrderHistoryComponent.vue';
+import ReturnOrderComponent from '../../components/frontend/account/orderHistory/ReturnOrderComponent.vue';
+
 export default [
     {
         path: "/admin/profile/edit-profile",
@@ -24,11 +29,11 @@ export default [
     {
         path: '/order-history',
         name: 'frontend.account.orderHistory', // This must exist
-        component: () => import('../../components/frontend/account/OrderHistoryComponent.vue'),
+        component: OrderHistoryComponent
     },
     {
         path: '/return-orders',
         name: 'frontend.account.returnOrders', // This must exist
-        component: () => import('../../components/frontend/account/ReturnOrderComponent.vue'),
+        component: ReturnOrderComponent
     },
 ];
