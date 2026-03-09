@@ -103,7 +103,7 @@ export default {
   },
   computed: {
     categories() {
-      return this.$store.getters['frontendProductCategory/lists'] || [];
+      return this.$store.getters['frontendProductCategory/lists'];
     },
   },
   mounted() {

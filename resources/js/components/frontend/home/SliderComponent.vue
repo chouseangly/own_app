@@ -82,7 +82,8 @@ export default {
     },
     computed: {
         sliders: function () {
-            return this.$store.getters['frontendSlider/lists'] || [];
+            
+            return this.$store.getters['frontendSlider/lists'];
         }
     },
     mounted() {

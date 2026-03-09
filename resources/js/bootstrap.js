@@ -4,7 +4,7 @@ window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 // Set Base URL from Vite environment variables
-axios.defaults.baseURL = import.meta.env.VITE_API_URL + '/api';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL ;
 
 axios.interceptors.request.use(
     config => {
