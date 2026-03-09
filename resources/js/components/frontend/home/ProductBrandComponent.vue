@@ -91,7 +91,7 @@ export default {
     },
     computed: {
         brands: function () {
-            return this.$store.getters["frontendProductBrand/lists"];
+            return this.$store.getters["frontendProductBrand/lists"] || [];
         },
     },
     mounted() {
