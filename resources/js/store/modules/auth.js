@@ -12,8 +12,8 @@ export const auth = {
     getters: { // <--- Add this block
         authStatus: (state) => !!state.token,
         authInfo: (state) => state.user,
-         authDefaultPermission: (state) => state.user?.permissions || {},
-    authDefaultMenu: (state) => state.user?.default_menu || null,
+        authDefaultPermission: (state) => state.user?.permissions || {},
+        authDefaultMenu: (state) => state.user?.default_menu || null,
     },
     mutations: {
         AUTH_SUCCESS(state, { token, user }) {
@@ -54,12 +54,13 @@ export const auth = {
                 throw error;
             }
         },
-        async login({ commit }, credentails) {
+        async login({ commit }, credentials) {
             try {
-                const response = await axios.post('/api/login', credentails);
-                // Fix: Extract directly from response.data based on your JSON structure
+                const response = await axios.post('/api/login', credentials);
+
+                // Match the Postman structure: { "data": { "id": 1, ... }, "token": "..." }
                 const token = response.data.token;
-                const user = response.data.user;
+                const user = response.data.data; // Accessing the 'data' key from Postman
 
                 localStorage.setItem('token', token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -90,29 +91,18 @@ export const auth = {
             }
         },
         async updateUser({ commit }) {
-            try {
-                const token = localStorage.getItem('token');
-                if (token) {
-                    // CRITICAL: Set header manually before the profile call
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
                     const response = await axios.get('/api/profile');
-
-                    /* FIX: Based on your UserResource.php,
-                       Laravel Resources wrap data in a 'data' key.
-                    */
                     const user = response.data.data;
-
-                    commit('AUTH_SUCCESS', {
-                        token: token,
-                        user: user
-                    });
+                    commit('AUTH_SUCCESS', { token, user });
+                } catch (error) {
+                    commit('LOGOUT');
                 }
-            } catch (error) {
-                console.error("Profile fetch failed:", error);
-                localStorage.removeItem('token');
-                delete axios.defaults.headers.common['Authorization'];
-                commit('LOGOUT');
+            } else {
+                commit('LOGOUT'); // Ensure state is null if no token exists
             }
         },
         async resetPassword({ commit }, payload) {

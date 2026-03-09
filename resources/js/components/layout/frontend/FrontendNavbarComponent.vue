@@ -353,9 +353,11 @@ export default {
         this.currentRoute = this.$route.path;
 
         // 1. Restore User Session if token exists
-        if (this.logged && !this.profile.name) {
-            this.$store.dispatch('auth/updateUser');
-        }
+        if (localStorage.getItem('token') && !this.profile.name) {
+        this.$store.dispatch('auth/updateUser').then(() => {
+            console.log("Profile Sync Complete:", this.profile);
+        });
+    }
 
         // 2. Fetch other data
         this.$store.dispatch('frontendProductCategory/trees');
