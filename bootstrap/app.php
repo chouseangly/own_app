@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'installed' => \App\Http\Middleware\InstalledMiddleware::class, // Add this
-        'apiKey'             => \App\Http\Middleware\ApiKeyMiddleware::class, // Ensure this file exists
+        'apiKey'             => \App\Http\Middleware\ApiKeyMiddleware::class, // Add this
         'localization'       => \App\Http\Middleware\localization::class
 
     ]);

@@ -13,12 +13,13 @@ use Illuminate\Support\Facades\File;
 class AppLibrary
 {
     public static function date($date, $pattern = null): string
-    {
-        if (!$pattern) {
-            $pattern = env('DATE_FORMAT');
-        }
-        return Carbon::parse($date)->format($pattern);
+{
+    if (!$pattern) {
+        // Use 'd-m-Y' as a default if DATE_FORMAT is not set in .env
+        $pattern = env('DATE_FORMAT', 'd-m-Y');
     }
+    return Carbon::parse($date)->format($pattern);
+}
 
     public static function time($time, $pattern = null): string
     {
@@ -372,15 +373,15 @@ class AppLibrary
         rmdir($dirPath);
     }
 
-    public static function sku($sku)
-    {
-        $productVariation = ProductVariation::where(['sku' => $sku])->first();
-        $product = Product::where(['sku' => $sku])->first();
-        if ($productVariation || $product) {
-            self::sku(rand(1000000, 9999999));
-        }
-        return $sku;
-    }
+    // public static function sku($sku)
+    // {
+    //     $productVariation = ProductVariation::where(['sku' => $sku])->first();
+    //     $product = Product::where(['sku' => $sku])->first();
+    //     if ($productVariation || $product) {
+    //         self::sku(rand(1000000, 9999999));
+    //     }
+    //     return $sku;
+    // }
 
     public static function recursive($elements, $parentId = 0): array
     {

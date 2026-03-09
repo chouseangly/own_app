@@ -1,7 +1,7 @@
 <template>
   <LoadingComponent :props="loading" />
 
-  <section v-if="categories.length" class="sm:mb-10">
+  <section v-if="categories?.length" class="sm:mb-10">
     <div class="mx-auto max-w-screen-xl ">
       <!-- Title -->
       <div class="flex justify-between">
