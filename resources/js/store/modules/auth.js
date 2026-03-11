@@ -1,301 +1,132 @@
 import axios from "axios";
-import { register } from "swiper/element";
-import VerifyOtp from "../../components/frontend/auth/VerifyOtp.vue";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export const auth = {
+    namespaced: true,
     state: {
-        authStatus: false,
-        authToken: null,
-        authInfo: {},
-        authMenu: [],
-        resetInfo: {
-            email: null,
-        },
-        authPermission: {},
-        authDefaultPermission: {},
-        phone: {},
-        email: {},
-        authDefaultMenu: {},
+        user: null,
+        token: localStorage.getItem('token') || null,
+        status: ''
     },
-    getters: {
-        authStatus: function (state) {
-            return state.authStatus;
-        },
-        authToken: function (state) {
-            return state.authToken;
-        },
-        authInfo: function (state) {
-            return state.authInfo;
-        },
-        authMenu: function (state) {
-            return state.authMenu;
-        },
-        authPermission: function (state) {
-            return state.authPermission;
-        },
-        authDefaultPermission: function (state) {
-            return state.authDefaultPermission;
-        },
-        resetInfo: function (state) {
-            return state.resetInfo;
-        },
-        phone: function (state) {
-            return state.phone;
-        },
-        email: function (state) {
-            return state.phone;
-        },
-        authDefaultMenu: function (state) {
-            return state.authDefaultMenu;
-        },
-    },
-    actions: {
-        profile: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/profile", payload)
-                    .then((res) => {
-                        context.commit("authInfo", res.data.data);
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        register: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("/api/auth/register", payload)
-                    .then((res) => {
-                        context.commit('register', res.data.data);
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        }
-        ,
-        login: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("/api/auth/login", payload)
-                    .then((res) => {
-                        context.commit("authLogin", res.data);
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        authcheck: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("/api/auth/authcheck", payload)
-                    .then((res) => {
-                        if (res.data.status === false) {
-                            context.commit("authLogout");
-                        }
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        logout: function (context) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("/api/auth/logout")
-                    .then((res) => {
-                        context.commit("authLogout");
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        forgotPassword: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("/api/auth/forgot-password", payload)
-                    .then((res) => {
-                        context.commit("email", payload);
-                        context.commit("phone", payload);
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        // forgotPasswordVerifyPhone: function (context, payload) {
-        //     return new Promise((resolve, reject) => {
-        //         let url = "auth/forgot-password/verify-phone";
-        //         axios
-        //             .post(url, payload)
-        //             .then((res) => {
-        //                 resolve(res);
-        //             })
-        //             .catch((err) => {
-        //                 reject(err);
-        //             });
-        //     });
-        // },
-        forgotPasswordVerifyEmail: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                let url = "auth/forgot-password/verify-email";
-                axios
-                    .post(url, payload)
-                    .then((res) => {
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        // otpPhone: function (context, payload) {
-        //     return new Promise((resolve, reject) => {
-        //         let url = "auth/forgot-password/otp-phone";
-        //         axios
-        //             .post(url, payload)
-        //             .then((res) => {
-        //                 context.commit("phone", payload);
-        //                 resolve(res);
-        //             })
-        //             .catch((err) => {
-        //                 reject(err);
-        //             });
-        //     });
-        // },
-        forgotPassword: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                let url = "/api/auth/forgot-password";
-                axios
-                    .post(url, payload)
-                    .then((res) => {
-                        context.commit("email", payload);
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        resetPassword: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                axios
-                    .post("/api/auth/reset-password", payload)
-                    .then((res) => {
-                        context.commit("authLogin", res.data);
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        updateAuthInfo: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                if (context.state.authInfo.id === payload.id) {
-                    context.commit("authInfo", payload);
-                    resolve(payload);
-                } else {
-                    reject("user data not match");
-                }
-            });
-        },
-        // verifyPhone: function (context, payload) {
-        //     return new Promise((resolve, reject) => {
-        //         let url = "auth/signup/verify-phone";
-        //         axios
-        //             .post(url, payload)
-        //             .then((res) => {
-        //                 resolve(res);
-        //             })
-        //             .catch((err) => {
-        //                 reject(err);
-        //             });
-        //     });
-        // },
-        VerifyOtp: function (context, payload) {
-            return new Promise((resolve, reject) => {
-                let url = "/api/auth/verify-otp";
-                axios
-                    .post(url, payload)
-                    .then((res) => {
-                        resolve(res);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        },
-        // signupLoginVerify: function (context, payload) {
-        //     return new Promise((resolve, reject) => {
-        //         axios
-        //             .post("auth/signup/login-verify", payload)
-        //             .then((res) => {
-        //                 context.commit("authLogin", res.data);
-        //                 resolve(res);
-        //             })
-        //             .catch((err) => {
-        //                 reject(err);
-        //             });
-        //     });
-        // },
-        loginDataReset: function (context) {
-            context.commit("authLogout");
-        },
-        reset: function (context) {
-            context.commit("reset");
-        },
+    getters: { // <--- Add this block
+        authStatus: (state) => !!state.token,
+        authInfo: (state) => state.user,
+        authDefaultPermission: (state) => state.user?.permissions || {},
+        authDefaultMenu: (state) => state.user?.default_menu || null,
     },
     mutations: {
-        authLogin: function (state, payload) {
-            state.authStatus = true;
-            state.authToken = payload.token;
-            state.authInfo = payload.user;
-            state.authMenu = payload.menu;
-            state.authPermission = payload.permission;
-            state.authDefaultPermission = payload.defaultPermission;
-            state.authDefaultMenu = payload.defaultMenu;
+        AUTH_SUCCESS(state, { token, user }) {
+            state.status = 'success';
+            state.token = token;
+            state.user = user;
         },
-        authLogout: function (state) {
-            state.authStatus = false;
-            state.authToken = null;
-            state.authInfo = {};
-            state.authMenu = [];
-            state.authPermission = {};
-            state.authDefaultPermission = {};
-            state.authDefaultMenu = {};
+
+        AUTH_ERROR(state) {
+            state.status = 'error';
         },
-        forgotPassword: function (state, payload) {
-            state.resetInfo = {
-                email: payload.email,
-            };
-        },
-        resetPassword: function (state) {
-            state.resetInfo = {
-                email: null,
-            };
-        },
-        authInfo: function (state, payload) {
-            state.authInfo = payload;
-        },
-        // phone: function (state, payload) {
-        //     state.phone.otp = payload;
-        // },
-        email: function (state, payload) {
-            state.email.otp = payload;
-        },
-        reset: function (state) {
-            state.phone = {};
-            state.email = {};
-        },
+
+        LOGOUT(state) {
+            state.status = '';
+            state.token = null;
+            state.user = null;
+        }
+
+
     },
-};
+    actions: {
+        async register({ commit }, userData) {
+            try {
+                const response = await axios.post('/api/auth/register', userData);
+                return response.data;
+
+            } catch (error) {
+                commit('AUTH_ERROR');
+                throw error;
+            }
+        },
+        async verifyOtp({ commit }, otpData) {
+            try {
+                const response = await axios.post('/api/auth/verify-otp', otpData);
+                return response.data;
+            } catch (error) {
+
+                throw error;
+            }
+        },
+        async login({ commit }, credentials) {
+            try {
+                const response = await axios.post('/api/auth/login', credentials);
+
+                // Match the Postman structure: { "data": { "id": 1, ... }, "token": "..." }
+                const token = response.data.token;
+                const user = response.data.data; // Accessing the 'data' key from Postman
+
+                localStorage.setItem('token', token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+                commit('AUTH_SUCCESS', { token, user });
+                return response.data;
+            } catch (error) {
+                localStorage.removeItem('token');
+                commit('AUTH_ERROR');
+                throw error;
+            }
+        },
+        async resentOtp({ commit }, emailData) {
+            try {
+                const response = await axios.post('/api/auth/resent-otp', emailData);
+                return response.data;
+            } catch (error) {
+                throw error
+            }
+        },
+        async forgotPassword({ commit }, emailData) {
+            try {
+                const response = await axios.post('/api/auth/forgot-password', emailData)
+                return response.data;
+
+            } catch (error) {
+                throw error
+            }
+        },
+        async updateUser({ commit }) {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                    const response = await axios.get('/api/profile');
+                    const user = response.data.data;
+                    commit('AUTH_SUCCESS', { token, user });
+                } catch (error) {
+                    commit('LOGOUT');
+                }
+            } else {
+                commit('LOGOUT'); // Ensure state is null if no token exists
+            }
+        },
+        async resetPassword({ commit }, payload) {
+            try {
+                const response = await axios.post('/api/auth/reset-password', payload);
+                return response.data;
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async logout({ commit }) {
+            localStorage.removeItem('token');
+            delete axios.defaults.headers.common['Authorization'];
+            commit('LOGOUT');
+        },
+
+        async getMe({ commit }) {
+            try {
+                const response = await axios.get('/api/auth/me');
+                commit('AUTH_SUCCESS', { token: localStorage.getItem('token'), user: response.data.data });
+            } catch (error) {
+                commit('LOGOUT');
+            }
+        }
+    }
+}
