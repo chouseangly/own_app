@@ -48,7 +48,6 @@ export const frontendProductCategory = {
                     url = url + appService.requestHandler(payload);
                 }
                 axios.get(url).then((res) => {
-                    console.log("Category API Response:", res.data);
                     context.commit("lists", res.data.data);
                     resolve(res);
                 }).catch((err) => {

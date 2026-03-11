@@ -71,7 +71,7 @@ export default {
                 this.$router.push({name:'frontend.home'});
 
             }catch(error){
-                toast.error("Invalid credentials.");
+                this.toast.error("Invalid credentials.");
             }finally{
                 this.loading.isActive = false;
             }

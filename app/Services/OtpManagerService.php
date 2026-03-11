@@ -39,7 +39,7 @@ class OtpManagerService
         }
     }
 
-    public function verifyOtp(string $email, string $token)
+    public function verifyOtp(string $email, string $token): bool
     {
         $otp = Otp::where('email', $email)->where('token', $token)->first();
 

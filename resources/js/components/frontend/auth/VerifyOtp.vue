@@ -43,11 +43,11 @@
 
             <!-- OTP input -->
             <div class="mb-6">
-                <input v-model="form.otp"
-                    :class="errors.otp ? 'border-red-500' : 'border-gray-300 focus:border-sky-500'" type="text"
+                <input v-model="form.token"
+                    :class="errors.token ? 'border-red-500' : 'border-gray-300 focus:border-sky-500'" type="text"
                     placeholder="Enter 6-digit code"
                     class="w-full h-14 px-5 rounded-xl text-base border hover:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 transition-all duration-300">
-                <small class="text-red-500 mt-1 block" v-if="errors.otp">{{ errors.otp[0] }}</small>
+                <small class="text-red-500 mt-1 block" v-if="errors.token">{{ errors.token[0] }}</small>
             </div>
 
             <!-- Submit button -->
@@ -88,7 +88,7 @@ export default {
                 isActive: false
             },
             form: {
-                otp: '',
+                token: '',
                 email: this.$route.query.email || '' // Retrieve email from URL if passed
             },
             errors: {}
@@ -100,7 +100,7 @@ export default {
                 this.loading.isActive = true;
                 this.errors = {};
 
-                await this.$store.dispatch('/auth/verifyOtp', this.form);
+                await this.$store.dispatch('auth/verifyOtp', this.form);
                 this.toast.success('Verify otp successfully')
                 this.$router.push({ name: 'frontend.login' });
 

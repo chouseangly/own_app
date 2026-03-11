@@ -60,7 +60,7 @@ export const auth = {
 
                 // Match the Postman structure: { "data": { "id": 1, ... }, "token": "..." }
                 const token = response.data.token;
-                const user = response.data.data; // Accessing the 'data' key from Postman
+                const user = response.data.user;
 
                 localStorage.setItem('token', token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
