@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('')->group(function () {
+Route::prefix('auth')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/register', [SignupController::class, 'register']);
     Route::post('/verify-otp', [SignupController::class, 'verifyOtp']);

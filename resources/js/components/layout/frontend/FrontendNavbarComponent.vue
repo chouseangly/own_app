@@ -269,11 +269,13 @@
                 <li :key="searchProductList.name"
                     class="py-1 hover:px-2 whitespace-nowrap overflow-hidden text-ellipsis rounded-lg transition-all duration-300 hover:bg-white hover:text-primary"
                     @click.prevent="goSearchProduct(searchProductList.slug)"
-                    v-for="searchProductList in searchProductLists">{{ searchProductList.name }}</li>
+                    v-for="searchProductList in searchProductLists">{{ searchProductList.name }}
+                </li>
             </ul>
         </div>
     </form>
     <!-- Mobile Search End -->
+
 
     <!-- Notification Start -->
     <div id="order-modal" v-if="orderNotificationStatus" ref="orderNotificationModal" class="modal active ff-modal">
@@ -336,7 +338,7 @@ export default {
         };
     },
     computed: {
-        logged() { return this.$store.getters['auth/authStatus']; },
+        logged() { return this.$store.getters.authStatus; },
         profile() { return this.$store.getters['auth/authInfo'] || {}; },
         setting() { return this.$store.getters['frontendSetting/lists'] || {}; },
         categories() { return this.$store.getters['frontendProductCategory/trees'] || []; },
@@ -354,10 +356,10 @@ export default {
 
         // 1. Restore User Session if token exists
         if (localStorage.getItem('token') && !this.profile.name) {
-        this.$store.dispatch('auth/updateUser').then(() => {
-            console.log("Profile Sync Complete:", this.profile);
-        });
-    }
+            this.$store.dispatch('auth/updateUser').then(() => {
+                console.log("Profile Sync Complete:", this.profile);
+            });
+        }
 
         // 2. Fetch other data
         this.$store.dispatch('frontendProductCategory/trees');
