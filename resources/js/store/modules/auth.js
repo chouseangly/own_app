@@ -9,7 +9,7 @@ export const auth = {
         token: localStorage.getItem('token') || null,
         status: ''
     },
-    getters: { // <--- Add this block
+    getters: {
         authStatus: (state) => !!state.token,
         authInfo: (state) => state.user,
         authDefaultPermission: (state) => state.user?.permissions || {},
@@ -21,18 +21,15 @@ export const auth = {
             state.token = token;
             state.user = user;
         },
-
         AUTH_ERROR(state) {
             state.status = 'error';
+            state.user = null; // Reset user on error
         },
-
         LOGOUT(state) {
             state.status = '';
             state.token = null;
             state.user = null;
         }
-
-
     },
     actions: {
         async register({ commit }, userData) {
@@ -54,11 +51,9 @@ export const auth = {
                 throw error;
             }
         },
-        async login({ commit }, credentials) {
+       async login({ commit }, credentials) {
             try {
                 const response = await axios.post('/api/auth/login', credentials);
-
-                // Match the Postman structure: { "data": { "id": 1, ... }, "token": "..." }
                 const token = response.data.token;
                 const user = response.data.user;
 
@@ -72,6 +67,7 @@ export const auth = {
                 commit('AUTH_ERROR');
                 throw error;
             }
+        },
         },
         async resentOtp({ commit }, emailData) {
             try {
@@ -96,14 +92,21 @@ export const auth = {
                 try {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     const response = await axios.get('/api/profile');
-                    const user = response.data.data;
+                    // Ensure this matches your backend response (e.g., response.data.data or just response.data)
+                    const user = response.data.data || response.data;
                     commit('AUTH_SUCCESS', { token, user });
                 } catch (error) {
+                    localStorage.removeItem('token');
                     commit('LOGOUT');
                 }
             } else {
-                commit('LOGOUT'); // Ensure state is null if no token exists
+                commit('LOGOUT');
             }
+        },
+        async logout({ commit }) {
+            localStorage.removeItem('token');
+            delete axios.defaults.headers.common['Authorization'];
+            commit('LOGOUT');
         },
         async resetPassword({ commit }, payload) {
             try {
@@ -112,12 +115,6 @@ export const auth = {
             } catch (error) {
                 throw error;
             }
-        },
-
-        async logout({ commit }) {
-            localStorage.removeItem('token');
-            delete axios.defaults.headers.common['Authorization'];
-            commit('LOGOUT');
         },
 
         async getMe({ commit }) {
@@ -129,4 +126,4 @@ export const auth = {
             }
         }
     }
-}
+

@@ -338,7 +338,8 @@ export default {
         };
     },
     computed: {
-        logged() { return this.$store.getters.authStatus; },
+        // FIXED: Added 'auth/' namespace to match the namespaced store
+        logged() { return this.$store.getters['auth/authStatus']; },
         profile() { return this.$store.getters['auth/authInfo'] || {}; },
         setting() { return this.$store.getters['frontendSetting/lists'] || {}; },
         categories() { return this.$store.getters['frontendProductCategory/trees'] || []; },
@@ -346,26 +347,14 @@ export default {
         languages() { return this.$store.getters['frontendLanguage/lists'] || []; },
         wishlists() { return this.$store.getters['frontendWishlist/lists'] || []; },
         carts() { return this.$store.getters['frontendCart/lists'] || []; },
-
-        // Ensure these match your actual store structure
         authDefaultPermission() { return this.$store.getters['auth/authDefaultPermission'] || {}; },
         defaultMenu() { return this.$store.getters['auth/authDefaultMenu'] || {}; }
     },
     mounted() {
         this.currentRoute = this.$route.path;
-
-        // 1. Restore User Session if token exists
-        if (localStorage.getItem('token') && !this.profile.name) {
-            this.$store.dispatch('auth/updateUser').then(() => {
-                console.log("Profile Sync Complete:", this.profile);
-            });
-        }
-
-        // 2. Fetch other data
         this.$store.dispatch('frontendProductCategory/trees');
         this.$store.dispatch('frontendWishlist/lists');
     },
-    // FIXED: Watcher to set initial active tab once data is loaded
     watch: {
         categories: {
             handler(newVal) {
@@ -384,6 +373,7 @@ export default {
         resetSearch() { this.searchProduct = ""; },
         logout() {
             this.$store.dispatch("auth/logout").then(() => {
+                // Fixed: Ensure the wishlist reset is also dispatched if it's namespaced
                 this.$store.dispatch("frontendWishlist/reset");
                 this.$router.push({ name: "frontend.home" });
             });
