@@ -33,6 +33,6 @@ app.use(Toast,toastOptions);
 
 // FIX: Fetch user profile on startup if token exists
 if (localStorage.getItem('token')) {
-    store.dispatch('auth/updateUser');
+    store.dispatch('auth/updateUser'); // This will now find the action
 }
 app.mount('#app');

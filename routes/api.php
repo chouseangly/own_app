@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Frontend\SliderController as FrontendSliderController;
 use App\Http\Controllers\Frontend\ProductCategoryController as FrontendProductCategoryController;
 use App\Http\Controllers\Frontend\ProductBrandController as FrontendProductBrandController;
+use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\Frontend\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -140,6 +141,12 @@ Route::prefix('frontend')->group(function () {
     });
      Route::prefix('product-brand')->name('product-brand.')->group(function () {
         Route::get('/', [FrontendProductBrandController::class, 'index']);
+    });
+
+
+    Route::prefix('product')->name('product.')->group(function (){
+        Route::get('/',[FrontendProductController::class,'index']);
+        Route::get('/show/{product:slug}',[FrontendProductController::class,'show']);
     });
 
 

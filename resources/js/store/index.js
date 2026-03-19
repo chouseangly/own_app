@@ -8,6 +8,9 @@ import { frontendProductBrand } from "./modules/frontend/frontendProductBrand";
 import { barcode } from "./modules/barcode";
 import { frontendEditProfile } from "./modules/frontend/frontendEditProfile";
 import axios from "axios";
+import { frontendWishlist } from "./modules/frontend/frontendWishlist";
+import { frontendSetting } from "./modules/frontend/frontendSetting";
+import { frontendLanguage } from "./modules/frontend/frontendLanguage";
 
 // ADD THIS BLOCK — restores auth header on every page refresh
 const token = localStorage.getItem('token');
@@ -26,7 +29,10 @@ export default createStore({
         frontendSlider,
         frontendProductBrand,
         barcode,
-        frontendEditProfile
+        frontendEditProfile,
+        frontendWishlist,
+        frontendSetting,
+        frontendLanguage,
     },
 
     plugins: [

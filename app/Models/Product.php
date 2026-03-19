@@ -3,15 +3,22 @@
 namespace App\Models;
 
 use App\Enums\Status;
-use Spatie\Image\Enums\Fit;
-use Spatie\MediaLibrary\HasMedia;
+use App\Models\ProductBrand;
+use App\Models\ProductCategory;
+use App\Models\ProductReview;
+use App\Models\ProductVariation;
+use App\Models\ProductVideo;
+use App\Models\Stock;
+use App\Models\Wishlist;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Image\Enums\CropPosition;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Product extends Model implements HasMedia
@@ -179,6 +186,66 @@ class Product extends Model implements HasMedia
     public function brand(){
         return $this->belongsTo(ProductBrand::class,'product_brand_id','id');
     }
+
+    public function unit(){
+        return $this->belongsTo(Unit::class,'unit_id','id');
+    }
+
+    public function variations(): HasMany
+    {
+        return $this->hasMany(ProductVariation::class, 'product_id', 'id');
+    }
+
+    public function taxes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductTax::class, 'product_id', 'id');
+    }
+
+    public function tags(){
+        return $this->hasMany(ProductTag::class,'product_id','id');
+    }
+
+    public function reviews(){
+        return $this->hasMany(ProductReview::class,'product_id','id');
+    }
+
+    public function wishlist(){
+        return $this->hasMany(Wishlist::class,'product_id','id');
+    }
+
+    public function stockItems()
+    {
+         return $this->stocks()->where('status', Status::ACTIVE);
+    }
+
+     public function stocks(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(Stock::class, 'item');
+    }
+
+      public function videos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductVideo::class, 'product_id', 'id');
+    }
+
+    public function seo(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ProductSeo::class, 'product_id', 'id');
+    }
+
+    public function scopeWithReviewRating($query)
+    {
+        $reviewsStar      = ProductReview::selectRaw('sum(star)')->whereColumn('product_id', 'products.id')->getQuery();
+        $reviewsStarCount = ProductReview::selectRaw('count(product_id)')->whereColumn('product_id', 'products.id')->getQuery();
+        $base             = $query->getQuery();
+        if (is_null($base->columns)) {
+            $query->select([$base->from . '.*']);
+        }
+        return $query->selectSub($reviewsStar, 'rating_star')->selectSub($reviewsStarCount, 'rating_star_count');
+    }
+
+    
+
 
 
 

@@ -68,7 +68,7 @@ export const auth = {
                 throw error;
             }
         },
-        },
+
         async resentOtp({ commit }, emailData) {
             try {
                 const response = await axios.post('/api/auth/resent-otp', emailData);
@@ -126,4 +126,5 @@ export const auth = {
             }
         }
     }
+};
 
